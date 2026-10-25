@@ -1,24 +1,55 @@
+[bits 16]
+extern kernel_main
 start:
-    mov ax, cs
+    mov ax, cs 
     mov ds, ax
+    
+    call load_gdt
+    call init_video_mode
+    call enter_protected_mode
+    call setup_interrupts
 
-    mov si, hello_string
-    call print
+    call 08h:start_kernel
 
-    jmp $
-
-print:
-    mov ah, 0x0E
-
-print_loop:
-    lodsb
-    cmp al, 0
-    je print_end 
-    int 0x10
-    jmp print_loop
-
-print_end:
+setup_interrupts:
     ret
 
-hello_string:
-    db "Hello from the 539 Kernel!",0
+load_gdt:
+    cli
+    lgdt [gdtr - start]
+    ret
+
+enter_protected_mode:
+    mov eax, cr0
+    or eax, 1
+    mov cr0, eax
+    
+    ret
+
+init_video_mode:
+    mov ah, 0h
+    mov al, 03h
+    int 10h
+    
+    mov ah, 01h
+    mov cx, 2000h
+    int 10h
+    
+    ret
+
+bits 32
+start_kernel:
+    mov eax, 10h
+    mov ds, eax
+    mov ss, eax
+    
+    mov eax, 0h
+    mov es, eax
+    mov fs, eax
+    mov gs, eax
+    
+    sti
+    
+    call kernel_main
+
+%include "gdt.asm"
