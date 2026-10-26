@@ -12,6 +12,9 @@ start:
     call 08h:start_kernel
 
 setup_interrupts:
+    call remap_pic
+    call load_idt
+
     ret
 
 load_gdt:
@@ -53,3 +56,4 @@ start_kernel:
     call kernel_main
 
 %include "gdt.asm"
+%include "idt.asm"

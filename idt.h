@@ -1,0 +1,1 @@
+void interrupt_handler(int interrupt_number);

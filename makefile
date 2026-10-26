@@ -2,9 +2,9 @@ ASM = nasm
 CC = i386-elf-gcc
 BOOTSTRAP_FILE = bootstrap.asm 
 INIT_KERNEL_FILES = starter.asm
-KERNEL_FILES = main.c vga.c
+KERNEL_FILES = main.c vga.c idt.c
 KERNEL_FLAGS = -Wall -c -m32 -ffreestanding -fno-asynchronous-unwind-tables -fno-pie
-KERNEL_OUTPUTS = vga.o main.o
+KERNEL_OUTPUTS = vga.o main.o idt.o
 
 build: $(BOOTSTRAP_FILE) $(KERNEL_FILE)
 	$(ASM) -f bin $(BOOTSTRAP_FILE) -o bootstrap.o
@@ -21,3 +21,4 @@ clean:
 	rm -rf *.o
 	rm -rf *.elf
 	rm -rf *.bin
+	rm -rf *.img
