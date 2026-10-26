@@ -37,7 +37,7 @@ init_video_mode:
     
     ret
 
-bits 32
+[bits 32]
 start_kernel:
     mov eax, 10h
     mov ds, eax

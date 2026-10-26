@@ -15,7 +15,7 @@ build: $(BOOTSTRAP_FILE) $(KERNEL_FILE)
 	dd if=bootstrap.o of=kernel.img
 	dd seek=1 conv=sync if=539kernel.bin of=kernel.img bs=512 count=5
 	dd seek=6 conv=sync if=/dev/zero of=kernel.img bs=512 count=2046
-	qemu-system-x86_64 -s kernel.img
+	qemu-system-i386 -s -no-reboot kernel.img
 
 clean:
 	rm -rf *.o
