@@ -41,7 +41,7 @@ remap_pic:
     ret
 
 load_idt:
-    lidt [idtr - start]
+    lidt [idt_ptr - start]
     ret
 
 %macro create_isr 1
@@ -185,7 +185,8 @@ idt:
     dw isr_46, 8, 0x8e00, 0x0000
     dw isr_47, 8, 0x8e00, 0x0000
     dw isr_48, 8, 0x8e00, 0x0000
+idt_end:
 
-idtr:
-    idt_size_in_bytes   :   dw idtr - idt
-    idt_base_address    :   dd idt
+idt_ptr:
+    dw idt_end - idt - 1
+    dd idt

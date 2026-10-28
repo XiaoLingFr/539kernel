@@ -1,8 +1,11 @@
 #include "vga.h"
 #include "idt.h"
+
+[[noreturn]]
 void kernel_main(){
     puts("Hello");
-
-    while(1);
-    return;
+    puts("Please continue");
+    
+    hang:
+    goto hang;
 }

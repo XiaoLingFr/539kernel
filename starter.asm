@@ -9,7 +9,7 @@ start:
     call enter_protected_mode
     call setup_interrupts
 
-    call 08h:start_kernel
+    jmp start_kernel
 
 setup_interrupts:
     call remap_pic
@@ -19,7 +19,17 @@ setup_interrupts:
 
 load_gdt:
     cli
-    lgdt [gdtr - start]
+    lgdt [gdt_ptr - start]
+
+    jmp 0x08:load_gdt_continue
+
+load_gdt_continue:
+    mov ax, 10h
+    mov ds, ax
+    mov ss, ax
+    mov es, ax
+    mov fs, ax
+    mov gs, ax
     ret
 
 enter_protected_mode:
@@ -30,29 +40,13 @@ enter_protected_mode:
     ret
 
 init_video_mode:
-    mov ah, 0h
-    mov al, 03h
+    mov ax, 0x0003
     int 10h
-    
-    mov ah, 01h
-    mov cx, 2000h
-    int 10h
-    
+
     ret
 
 [bits 32]
 start_kernel:
-    mov eax, 10h
-    mov ds, eax
-    mov ss, eax
-    
-    mov eax, 0h
-    mov es, eax
-    mov fs, eax
-    mov gs, eax
-    
-    sti
-    
     call kernel_main
 
 %include "gdt.asm"

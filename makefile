@@ -3,7 +3,7 @@ CC = i386-elf-gcc
 BOOTSTRAP_FILE = bootstrap.asm 
 INIT_KERNEL_FILES = starter.asm
 KERNEL_FILES = main.c vga.c idt.c
-KERNEL_FLAGS = -Wall -c -m32 -ffreestanding -fno-asynchronous-unwind-tables -fno-pie
+KERNEL_FLAGS = -Wall -c -m32 -ffreestanding -fno-asynchronous-unwind-tables -fno-pie -g
 KERNEL_OUTPUTS = vga.o main.o idt.o
 
 build: $(BOOTSTRAP_FILE) $(KERNEL_FILE)
@@ -15,7 +15,11 @@ build: $(BOOTSTRAP_FILE) $(KERNEL_FILE)
 	dd if=bootstrap.o of=kernel.img
 	dd seek=1 conv=sync if=539kernel.bin of=kernel.img bs=512 count=5
 	dd seek=6 conv=sync if=/dev/zero of=kernel.img bs=512 count=2046
-	qemu-system-i386 -s -no-reboot kernel.img
+
+	rm -rf *.o
+	rm -rf *.bin
+
+	qemu-system-i386 -drive file=kernel.img,format=raw
 
 clean:
 	rm -rf *.o

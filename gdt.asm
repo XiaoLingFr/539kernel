@@ -1,3 +1,4 @@
+align 8
 gdt:
 null_descriptor:
     dw 0
@@ -28,9 +29,8 @@ userspace_data_descriptor:
     dw 0x0000
     dw 0xf200
     dw 0x00cf
-
-gdtr:
-gdt_size_in_bytes:
-    dw (5*8)
-gdt_base_address:
+gdt_end:
+align 4
+gdt_ptr:
+    dw gdt_end - gdt - 1
     dd gdt
